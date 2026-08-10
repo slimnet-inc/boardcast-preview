@@ -376,7 +376,7 @@
     .actual-title .price-num {
       color: var(--orange);
       font-family: var(--font);
-      font-size: 76px;
+      font-size: 64px;
       font-weight: 900;
       letter-spacing: -.03em;
       line-height: 1;
@@ -395,6 +395,12 @@
       font-size: 12px;
       font-weight: 650;
       line-height: 1;
+    }
+    .price-note {
+      margin: 18px 0 0;
+      color: rgba(255,255,255,.62);
+      font-size: 11.5px;
+      line-height: 1.8;
     }
     .text-link {
       display: inline-flex;
@@ -905,6 +911,13 @@
       box-shadow: 0 0 0 54px rgba(255,255,255,.025), 0 0 0 108px rgba(255,255,255,.02);
     }
     .consult-head { max-width: 840px; margin-bottom: 72px; }
+    .consult-lead {
+      margin: 26px 0 0;
+      color: rgba(255,255,255,.75);
+      font-size: 15px;
+      line-height: 2;
+      letter-spacing: .04em;
+    }
     .consult h2 {
       margin: 0;
       font-family: var(--serif);
@@ -1004,6 +1017,21 @@
     }
     .footer-line { height: 50px; font-size: 13px; }
     .corp-tbd { margin-left: 8px; padding: 2px 7px; border: 1px dashed rgba(246,107,38,.7); color: var(--orange); font-size: 9px; }
+    .footer-legal {
+      display: flex;
+      justify-content: flex-end;
+      gap: 26px;
+      margin-top: 46px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .footer-legal a {
+      color: rgba(255,255,255,.55);
+      font-size: 11px;
+      letter-spacing: .06em;
+    }
+    .footer-legal a:hover { color: rgba(255,255,255,.85); }
+    .footer-legal + .copyright { margin-top: 14px; padding-top: 0; border-top: none; }
     .copyright {
       margin-top: 46px;
       padding-top: 24px;
@@ -1182,9 +1210,17 @@
   .section-head { flex-direction: column; align-items: flex-start; gap: 22px; margin-bottom: 40px; }
   .head-decor { display: none; }
 
-  /* FV */
-  .hero { min-height: 0; }
-  .hero-inner { padding: 70px 0 66px; }
+  /* FV：SPは縦いっぱい＋写真は右寄せ（建物を主役に） */
+  .hero { min-height: 100vh; min-height: 100svh; }
+  .hero-media {
+    background-image:
+      linear-gradient(90deg, rgba(1,42,86,.84) 0%, rgba(1,42,86,.58) 36%, rgba(1,42,86,.10) 100%),
+      linear-gradient(0deg, rgba(0,29,61,.78), transparent 58%),
+      url("./hero.png");
+    background-position: right center;
+  }
+  .hero-video { object-position: right center; }
+  .hero-inner { display: flex; flex-direction: column; justify-content: center; padding: 100px 0 76px; }
   .hero-kicker { margin-bottom: 20px; font-size: 11px; }
   .hero-eyebrow { font-size: 16px; margin-bottom: 12px; }
   .hero h1 { font-size: 38px; }
@@ -1192,7 +1228,8 @@
   .hero-copy { font-size: 14px; margin-top: 22px; }
   .hero-actions { flex-direction: column; gap: 12px; margin-top: 34px; }
   .btn { width: 100%; min-width: 0; height: 54px; }
-  .hero-scroll, .hero::after { display: none; }
+  .hero-scroll { bottom: 24px; }
+  .hero::after { display: none; }
 
   /* 料金の誤解→実際 */
   .price-layout { grid-template-columns: 1fr; gap: 16px; }
@@ -1200,7 +1237,7 @@
   .misconception blockquote { font-size: 23px; margin-top: 18px; }
   .price-arrow { transform: rotate(90deg); font-size: 28px; }
   .actual-title { font-size: 20px; }
-  .actual-title .price-num { font-size: 54px; }
+  .actual-title .price-num { font-size: 46px; }
   .actual-title .price-unit { font-size: 22px; }
   .price::after { display: none; }
 
@@ -1492,7 +1529,9 @@
   text-align: center;
 }
 .cta-band h2 { margin: 0 auto; max-width: 760px; font-size: 32px; font-weight: 700; line-height: 1.65; letter-spacing: .06em; }
+.cta-band .cta-note { margin: 22px auto 0; max-width: 640px; color: rgba(255,255,255,.72); font-size: 13.5px; line-height: 2; }
 .cta-band .closing-actions { margin-top: 40px; }
+.btn[aria-disabled="true"] { opacity: .45; pointer-events: none; }
 
 /* 関連ページ */
 .rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 54px; }
