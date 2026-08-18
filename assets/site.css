@@ -119,6 +119,7 @@
     }
 
     .nav-cta { display: none; }
+    /* SPのメニューボタン：枠は付けず、三本線（≡）と×のみを見せる */
     .navtoggle {
       display: none;
       width: 44px;
@@ -126,12 +127,13 @@
       margin-left: 10px;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(1,42,86,.22);
-      background: #fff;
+      border: none;
+      background: transparent;
       color: var(--navy);
-      font-size: 19px;
+      font-size: 26px;
       line-height: 1;
       cursor: pointer;
+      padding: 0;
     }
 
     /* --- TOPヘッダー：最初は透過（白ロゴ・白文字）→ スクロールで白背景へ反転 --- */
@@ -144,7 +146,7 @@
     .site-header.is-top .nav a { color: #fff; }
     .site-header.is-top .logo-white { opacity: 1; }
     .site-header.is-top .logo-navy { opacity: 0; }
-    .site-header.is-top .navtoggle { border-color: rgba(255,255,255,.5); background: transparent; color: #fff; }
+    .site-header.is-top .navtoggle { background: transparent; color: #fff; }
 
     .site-header.is-top.scrolled {
       background: rgba(255,255,255,.985);
@@ -154,7 +156,7 @@
     .site-header.is-top.scrolled .nav a { color: var(--navy); }
     .site-header.is-top.scrolled .logo-white { opacity: 0; }
     .site-header.is-top.scrolled .logo-navy { opacity: 1; }
-    .site-header.is-top.scrolled .navtoggle { border-color: rgba(1,42,86,.22); background: #fff; color: var(--navy); }
+    .site-header.is-top.scrolled .navtoggle { background: transparent; color: var(--navy); }
 
     .section-label {
       display: inline-flex;
