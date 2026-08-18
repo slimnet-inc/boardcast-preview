@@ -18,6 +18,9 @@
     html { scroll-behavior: smooth; background: var(--navy-deep); }
     body {
       margin: 0;
+      /* 出現アニメーション（右から出る要素）が一瞬はみ出して横スクロールが出るのを防ぐ。
+         hidden ではなく clip を使うのは、追従ヘッダー（sticky）を壊さないため */
+      overflow-x: clip;
       color: var(--navy-ink);
       background: var(--white);
       font-family: var(--font);
@@ -67,6 +70,24 @@
       font-weight: 700;
       letter-spacing: .09em;
     }
+    /* ホバー：下から線がクイッと上がって定位置に収まる（CTAボタンは対象外） */
+    .nav a:not(.nav-cta) { position: relative; }
+    .nav a:not(.nav-cta)::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: -7px;
+      height: 2px;
+      background: var(--orange);
+      transform: translateY(7px);
+      opacity: 0;
+      transition: transform .3s cubic-bezier(.2,.9,.25,1), opacity .22s ease;
+    }
+    .nav a:not(.nav-cta):hover::after,
+    .nav a:not(.nav-cta):focus-visible::after { transform: translateY(0); opacity: 1; }
+    /* 今いるページは下線を出したままにする（現在地の目印） */
+    .nav a[aria-current="page"]::after { transform: translateY(0); opacity: 1; }
+    .nav a[aria-current="page"] { color: var(--orange); }
+    .site-header.is-top .nav a[aria-current="page"] { color: #fff; }
     .header-cta {
       white-space: nowrap;
       min-width: 174px;
@@ -895,7 +916,10 @@
       min-height: 940px;
       padding: 150px 0;
       color: white;
-      background: var(--navy);
+      /* 直後の closing セクションと同化しないよう、全体を一段明るい紺にする。
+         ポイントは「下端」を closing の上端(#012A56)よりはっきり明るく保つこと。
+         上だけ明るくしても境目は同化したままになる（動きの演出・closing側は現状維持） */
+      background: linear-gradient(180deg, #0B5296 0%, #084179 58%, #073A6E 100%);
       position: relative;
       overflow: hidden;
     }
@@ -937,13 +961,21 @@
       padding: 52px;
       border: 1px solid rgba(255,255,255,.22);
       background: rgba(255,255,255,.045);
+      text-align: center;              /* カード内は中央揃え */
     }
     .consult-card.line-option { border-color: rgba(6,199,85,.68); }
+    /* 用途ラベル：金色のピル（丸バッジ）で見出しの上に置く */
     .consult-card .opt-no {
-      color: var(--gold);
-      font-size: 11px;
+      display: inline-block;
+      margin-bottom: 6px;
+      padding: 10px 30px;
+      color: #fff;
+      background: var(--gold);
+      border-radius: 5rem;
+      font-size: 18.5px;
       font-weight: 800;
-      letter-spacing: .18em;
+      letter-spacing: .12em;
+      line-height: 1.4;
     }
     .consult-card h3 { margin: 22px 0 0; font-size: 24px; letter-spacing: .055em; }
     .consult-card p { margin: 14px 0 0; color: rgba(255,255,255,.66); font-size: 14px; }
@@ -1096,8 +1128,26 @@
     .clip-rv.in { clip-path: inset(0 0 0 0); }
     .rv { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,.61,.36,1); }
     .rv.in { opacity: 1; transform: none; }
-    #led-canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-    /* FV動画スロット：assets/hero.mp4 を置いて下のHTMLコメントを外すだけで有効化 */
+    /* width/height を指定しないと、canvasが実ピクセル数のまま配置されて横スクロールが出る */
+    #led-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    /* FV背景：LEDドットの波（その場で描画）。動画ではないので画面の実解像度で常に鮮明 */
+    .hero-wave {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+    }
+    /* 紺背景セクションの下地に敷く波（HTMLに data-wave="0.42" を付けると自動で入る） */
+    .sect-wave { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .sect-wave ~ .container { position: relative; z-index: 1; }
+
+    /* 描画が効いている間は、下地の静止画の紺かぶりを弱める（文字側だけ残す） */
+    .hero-wave.on ~ .hero-media { background-image:
+      linear-gradient(90deg, rgba(1,42,86,.96) 0%, rgba(1,42,86,.86) 24%, rgba(1,42,86,.34) 52%, rgba(1,42,86,0) 78%); }
+
+    /* 動画を使う場合のスロット（現在は未使用・戻したいとき用に残す） */
     .hero-video {
       position: absolute;
       inset: 0;
@@ -1194,6 +1244,7 @@
     letter-spacing: .05em;
   }
   .nav a { width: 100%; padding: 17px 2px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .nav a:not(.nav-cta)::after { display: none; }   /* SPのドロワーでは下線演出は使わない */
   .brand-logo { width: 158px; }
   .header-cta { display: none; }              /* SPではドロワー内のCTAに集約 */
   .navtoggle { margin-left: auto; }           /* 3本線は右端へ */
@@ -1339,6 +1390,39 @@
   background: var(--navy);
   position: relative;
   overflow: hidden;
+}
+/* 商品ページ：見出しの右側に製品ビジュアルを置く（左＝文字／右＝写真） */
+.page-head.with-visual .container { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 56px; }
+.page-head.with-visual .ph-text { min-width: 0; }
+.page-head.with-visual .ph-visual {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 30px 70px rgba(0,10,26,.45);
+}
+/* 写真の縁を紺に溶かして、切り抜き感を出さない */
+.page-head.with-visual .ph-visual::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(1,42,86,.42), transparent 42%),
+    linear-gradient(0deg, rgba(1,42,86,.34), transparent 46%);
+}
+.page-head.with-visual .ph-visual-note {
+  position: absolute;
+  right: 0; bottom: -26px;
+  z-index: 2;
+  color: rgba(255,255,255,.5);
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+.page-head.with-visual .ph-visual::before {
+  content: "";
+  position: absolute; left: -14px; top: -14px; right: 26px; bottom: 26px;
+  border: 1px solid rgba(201,162,39,.5);
+  pointer-events: none;
+  z-index: 1;
 }
 .breadcrumb {
   display: flex;
@@ -1550,6 +1634,9 @@
 
 @media (max-width: 760px) {
   .page-head { padding: 84px 0 62px; }
+  .page-head.with-visual .container { grid-template-columns: 1fr; gap: 30px; }
+  .page-head.with-visual .ph-visual { aspect-ratio: 16 / 10; }
+  .page-head.with-visual .ph-visual::before { left: -8px; top: -8px; right: 16px; bottom: 16px; }
   .page-head h1 { font-size: 27px; }
   .page-head p { font-size: 14.5px; margin-top: 18px; }
   .breadcrumb { margin-bottom: 20px; font-size: 10px; flex-wrap: wrap; }

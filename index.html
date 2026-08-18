@@ -8,7 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/site.css">
+  <!-- ?v= はキャッシュ避け。CSSやJSを直したらこの数字を変える -->
+  <link rel="stylesheet" href="./assets/site.css?v=20260817h">
 </head>
 <body>
   <main>
@@ -26,18 +27,19 @@
             <a href="pricing.html">料金</a>
             <a href="flow.html">導入の流れ</a>
             <a href="faq.html">FAQ</a>
-            <a class="nav-cta" href="contact.html"><span class="line-mark">LINE</span>導入相談をする</a>
+            <a class="nav-cta" href="https://line.me/R/ti/p/@829ajccj" target="_blank" rel="noopener"><span class="line-mark">LINE</span>導入相談をする</a>
           </nav>
           <button class="navtoggle" type="button" aria-label="メニューを開く" aria-expanded="false">≡</button>
-          <a class="header-cta" href="contact.html"><span class="line-mark">LINE</span>導入相談をする</a>
+          <a class="header-cta" href="https://line.me/R/ti/p/@829ajccj" target="_blank" rel="noopener"><span class="line-mark">LINE</span>導入相談をする</a>
         </div>
       </header>
       <script>document.getElementById("siteHeader").classList.add("is-top");</script>
 
       <section class="hero">
-        <!-- ▼ Midjourney動画が用意できたら assets/hero.mp4 を置いて、次の1行のコメントを外す
-        <video class="hero-video" src="./assets/hero.mp4" autoplay muted loop playsinline poster="./assets/hero.png"></video>
-        ▲ -->
+        <!-- FV動画（Midjourney製・2026-08-12 差し込み）。差し替えるときは assets/hero.mp4 を上書きするだけ -->
+        <!-- FV背景：LEDドットの波を「その場で描く」（動画ではないので、画面の実解像度で常に鮮明。
+             WebGLが使えない環境では下の .hero-media の静止画がそのまま見える） -->
+        <canvas class="hero-wave" id="wave-canvas" aria-hidden="true"></canvas>
         <div class="hero-media"></div>
         <canvas id="led-canvas" aria-hidden="true"></canvas>
         <div class="hero-inner">
@@ -79,7 +81,7 @@
         </div>
       </section>
 
-      <section class="manifesto on-dark" data-fx="led beam">
+      <section class="manifesto on-dark" data-fx="led beam" data-wave="0.42">
         <div class="container wide manifesto-layout">
           <div>
             <h2>日本の街は、<br>まだ眠っている。</h2>
@@ -225,16 +227,16 @@
           </div>
           <div class="consult-options">
             <article class="consult-card">
-              <span class="opt-no">OPTION 01 / FORM</span>
+              <span class="opt-no">詳しく伝えたい方へ</span>
               <h3>フォームで相談する</h3>
-              <p>設置場所や用途、ご予算をもとに、担当者が最適なプランをご案内します。</p>
+              <p>設置場所や用途、ご予算をもとに、<br>担当者が最適なプランをご案内します。</p>
               <a class="btn form" href="contact.html">無料相談フォームへ <span class="arrow">→</span></a>
             </article>
             <article class="consult-card line-option">
-              <span class="opt-no">OPTION 02 / LINE</span>
+              <span class="opt-no">すぐに聞きたい方へ</span>
               <h3>LINEで気軽に相談する</h3>
-              <p>写真を送るだけでも大丈夫です。まだ検討初期のご相談にも対応します。</p>
-              <a class="btn line" href="contact.html"><span class="line-mark">LINE</span> LINEで無料相談する</a>
+              <p>写真を送るだけでも大丈夫です。<br>まだ検討初期のご相談にも対応します。</p>
+              <a class="btn line" href="https://line.me/R/ti/p/@829ajccj" target="_blank" rel="noopener"><span class="line-mark">LINE</span> LINEで無料相談する</a>
             </article>
           </div>
         </div>
@@ -265,7 +267,7 @@
                 <div><h4>SUPPORT</h4><a href="flow.html">導入までの流れ</a><a href="cases.html">設置イメージ</a><a href="faq.html">FAQ・よくある質問</a></div>
                 <div><h4>COMPANY</h4><a href="about.html">BOARDCASTについて</a><a href="pricing.html">料金プラン</a><a href="contact.html">お問い合わせ</a></div>
               </div>
-              <a class="line-big footer-line" href="contact.html"><span class="line-mark">LINE</span> LINEで相談する</a>
+              <a class="line-big footer-line" href="https://line.me/R/ti/p/@829ajccj" target="_blank" rel="noopener"><span class="line-mark">LINE</span> LINEで相談する</a>
             </div>
             <div class="footer-legal"><a href="privacy.html">プライバシーポリシー</a><a href="legal.html">特定商取引法に基づく表記</a></div>
             <div class="copyright">© 2026 BOARDCAST（スリム通信ネットワーク株式会社）</div>
@@ -275,7 +277,7 @@
     </div>
   </main>
 
-  <a class="floating-line" href="contact.html" aria-label="LINEで相談">LINE</a>
+  <a class="floating-line" href="https://line.me/R/ti/p/@829ajccj" target="_blank" rel="noopener" aria-label="LINEで相談">LINE</a>
   <a class="pagetop" id="pagetop" href="#" aria-label="ページトップへ">↑</a>
   <script>
   (() => {
@@ -347,6 +349,138 @@
       requestAnimationFrame(tick);
     }), { threshold: .6 });
     counts.forEach(c => cio.observe(c));
+
+    /* ===== FV背景：LEDドットの波（WebGLでその場描画）=====
+       動画を貼るとRetinaで引き伸ばされて眠くなるため、画面の実解像度で毎フレーム描く。
+       数式は 40_AD_広告動画/render_hero_wave.swift と同じ（あちらは書き出し用）。 */
+    /* 使い回せるように関数化：canvasを1つ渡すと、そこにLEDドットの波を描く。
+       opt.gain … 明るさ（1=FV / 0.5くらいで控えめな下地になる）
+       opt.step … 点の間隔（大きいほど粗く軽い） */
+    const makeWave = (cv, opt = {}) => {
+      if (!cv || reduced) return;
+      /* 色を「かけ算済み（premultiplied）」で出すので、受け取り側もその設定にする。
+         ここがずれていると、光が濁って平坦に見える */
+      const gl = cv.getContext("webgl", { alpha: true, antialias: true, premultipliedAlpha: true });
+      if (!gl) return;                      /* 使えない環境では静止画のまま */
+      const GAIN = opt.gain === undefined ? 1 : opt.gain;
+
+      /* --- 点の配置（Swift版と同じ格子）--- */
+      let seed = 20260817 >>> 0;
+      const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+      const STEP = opt.step || (innerWidth < 760 ? 0.42 : 0.30);   /* スマホは負荷を下げる */
+      const pos = [], col = [], phs = [];
+      for (let z = 6.0; z < 86; z += STEP) {
+        for (let x = -60; x < 60; x += STEP) {
+          const r = rnd();
+          const orangeBias = Math.max(0, (x + 2) / 48) * 0.46;
+          let c = [0.86, 0.94, 1.0];
+          if (r < orangeBias) c = [1.0, 0.45, 0.12];
+          else if (r < orangeBias + 0.40) c = [0.36, 0.62, 1.0];
+          pos.push(x + (rnd() - .5) * .10, z + (rnd() - .5) * .10);
+          col.push(c[0], c[1], c[2]);
+          phs.push(rnd() * 6.2831853, 1 + Math.floor(rnd() * 3));
+        }
+      }
+      const COUNT = pos.length / 2;
+
+      const vs = `
+        attribute vec2 aPos;      /* x, z */
+        attribute vec3 aCol;
+        attribute vec2 aPhs;      /* 瞬きの位相, 周回数 */
+        uniform float uT;         /* 0〜2π で1周 */
+        uniform vec2 uSize;       /* 画面の実ピクセル */
+        uniform float uGain;      /* 明るさ（下地として使うときは下げる） */
+        varying vec3 vCol;
+        varying float vA;
+        void main() {
+          float x = aPos.x, z = aPos.y;
+          float wave = sin(x * 0.26 + z * 0.20 - uT * 2.0) * 0.9
+                     + sin(x * 0.11 - z * 0.13 - uT) * 0.5;
+          float f = uSize.x * 0.62;
+          float cx = uSize.x * 0.5, cy = uSize.y * 0.40;
+          float camY = 3.1;
+          float sx = cx + (x / z) * f;
+          float sy = cy + ((camY - wave) / z) * f;
+          gl_Position = vec4((sx / uSize.x) * 2.0 - 1.0, 1.0 - (sy / uSize.y) * 2.0, 0.0, 1.0);
+          gl_PointSize = max(1.0, (0.040 / z) * f * 2.0);
+          float fog = max(0.0, 1.0 - (z - 6.0) / 88.0);
+          float crest = 0.34 + 0.78 * pow(max(0.0, (wave + 1.4) / 2.4), 1.7);
+          float tw = 0.55 + 0.45 * sin(uT * aPhs.y + aPhs.x);
+          float boost = (aCol.r > 0.9 && aCol.g < 0.6) ? 1.35 : 1.0;
+          vA = clamp(fog * crest * tw * 0.95 * boost * uGain, 0.0, 1.0);
+          vCol = aCol;
+        }`;
+      const fs = `
+        precision mediump float;
+        varying vec3 vCol;
+        varying float vA;
+        void main() {
+          /* 縁は最小限だけなじませる（ギザギザ防止のみ）。中心は芯を立ててくっきり見せる */
+          float d = length(gl_PointCoord - vec2(0.5));
+          float edge = smoothstep(0.5, 0.455, d);
+          float core = 1.0 + 0.55 * smoothstep(0.34, 0.0, d);
+          float a = edge * vA * core;
+          if (a < 0.004) discard;
+          gl_FragColor = vec4(vCol * a, a);
+        }`;
+      const sh = (t, src) => { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+      const prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+      gl.useProgram(prog);
+
+      const bind = (data, name, size) => {
+        const b = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, b);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+        const loc = gl.getAttribLocation(prog, name);
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
+      };
+      bind(pos, "aPos", 2); bind(col, "aCol", 3); bind(phs, "aPhs", 2);
+      const uT = gl.getUniformLocation(prog, "uT");
+      const uSize = gl.getUniformLocation(prog, "uSize");
+      gl.uniform1f(gl.getUniformLocation(prog, "uGain"), GAIN);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE);   /* 加算合成：光が重なるほど明るくなる（LEDらしい抜け感） */
+
+      const resize = () => {
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        cv.width = Math.round(cv.clientWidth * dpr);
+        cv.height = Math.round(cv.clientHeight * dpr);
+        gl.viewport(0, 0, cv.width, cv.height);
+        gl.uniform2f(uSize, cv.width, cv.height);
+      };
+      resize(); addEventListener("resize", resize);
+      cv.classList.add("on");
+
+      const LOOP = 10000;                      /* 10秒で1周（継ぎ目なし） */
+      let raf = null, t0 = performance.now();
+      const draw = now => {
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform1f(uT, ((now - t0) % LOOP) / LOOP * 6.2831853);
+        gl.drawArrays(gl.POINTS, 0, COUNT);
+        raf = requestAnimationFrame(draw);
+      };
+      /* 画面内にあるときだけ描く（省電力） */
+      new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) { if (!raf) raf = requestAnimationFrame(draw); }
+        else if (raf) { cancelAnimationFrame(raf); raf = null; }
+      })).observe(cv.parentElement);
+    };
+
+    /* FV：フル強度。ほかの紺背景セクションは data-wave 属性を付けるだけで控えめに敷ける */
+    makeWave(document.getElementById("wave-canvas"));
+    document.querySelectorAll("[data-wave]").forEach(sec => {
+      const c = document.createElement("canvas");
+      c.className = "sect-wave";
+      c.setAttribute("aria-hidden", "true");
+      sec.prepend(c);
+      makeWave(c, { gain: parseFloat(sec.dataset.wave) || 0.5, step: 0.42 });
+    });
 
     /* FV：LEDドットパーティクル（ロゴのピクセルB意匠） */
     const hero = document.querySelector(".hero");
